@@ -1,0 +1,22 @@
+@import url(https://fonts.googleapis.com/css2?family=Contrail+One&display=swap);
+
+h1.login-title{
+  font-family: 'Contrail One';
+  font-size: 30px;
+  color: black;
+}
+
+.login-container{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.container-small{
+  display: flex;
+  flex-direction: column;
+  margin-top: 20%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
