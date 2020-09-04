@@ -3,6 +3,7 @@ import { useSelector,useDispatch } from 'react-redux';
 import { getSpecificArticle, editArticle } from '../Store/action';
 import { useParams } from 'react-router-dom';
 import { Link,useHistory } from 'react-router-dom';
+import swal from 'sweetalert'
 
 import Navbar from '../Components/Navbar.component';
 import '../Styles/add.style.css'
@@ -32,8 +33,23 @@ function Edit(){
   },dispatch);
 
   const handleEdit = () =>{
-    dispatch(editArticle(userId,Number(id.id),title,body))
-    history.push('/articles')
+    swal({
+      title: "Are you sure want to edit",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willEdit) => {
+      if (willEdit) {
+        dispatch(editArticle(userId,Number(id.id),title,body))
+        history.push('/articles')
+        swal("success!", {
+          icon: "success",
+        });
+      } else {
+        swal("canceled!");
+      }
+    });
   }
 
 
