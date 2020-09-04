@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link,useHistory } from 'react-router-dom';
 import { useSelector,useDispatch } from 'react-redux';
 import { deleteToken } from '../Store/action';
+import swal from 'sweetalert'
 
 import '../Styles/navbar.style.css';
 
@@ -14,8 +15,23 @@ function Navbar(){
   const dispatch = useDispatch()
   const checkToken = useSelector(state=>state.reducer.token)
   const logout = (response) =>{
-    dispatch(deleteToken())
-    history.push('/articles')
+    swal({
+      title: "Are you sure want to logout",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willLogout) => {
+      if (willLogout) {
+        dispatch(deleteToken())
+        history.push('/articles')
+        swal("success!", {
+          icon: "success",
+        });
+      } else {
+        swal("canceled!");
+      }
+    });
   }
 
   return(

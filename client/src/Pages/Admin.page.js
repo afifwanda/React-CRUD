@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useSelector,useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link,useHistory } from 'react-router-dom';
 import { deleteArticle } from '../Store/action';
 import Button from '../Components/Button.component';
-
+import swal from 'sweetalert';
 import Navbar from '../Components/Navbar.component';
 import '../Styles/admin.style.css';
 
@@ -14,7 +14,7 @@ function Admin(){
   const indexLast = page * contentPerPage ;
   const indexFirst = indexLast - contentPerPage ;
   const dispatch = useDispatch()
-
+  const history = useHistory()
   const listArticle = useSelector(state=>state.reducer.article);
   listArticle.sort(function(a, b){return b.id-a.id});
   const currentListArticle = listArticle.slice(indexFirst,indexLast);
@@ -25,6 +25,26 @@ function Admin(){
 
   const handleNext = () => {
     setPage( page + 1 );
+  }
+
+  function handleDelete(id){
+    swal({
+      title: "Are you sure want to delete",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        dispatch(deleteArticle(Number(id)))
+        history.push('/admin')
+        swal("success!", {
+          icon: "success",
+        });
+      } else {
+        swal("canceled!");
+      }
+    });
   }
 
   return(
@@ -64,7 +84,7 @@ function Admin(){
                   <td>{(element.title).substring(0,20)+"..."}</td>
                   <td>{(element.body).substring(0,20)+"..."}</td>
                   <td>{<Link to={`/edit/${element.id}`}><i class='far fa-edit' /></Link>}</td>
-                  <td>{<i class='far fa-trash-alt' onClick={()=>dispatch(deleteArticle(Number(element.id)))} />}</td>
+                  <td>{<i class='far fa-trash-alt' onClick={() => handleDelete(element.id)} />}</td>
                 </tr>
               })}
             </tbody>
